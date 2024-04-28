@@ -3,10 +3,7 @@ package com.sunday.invoice_link_generator.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class CompanyIOUtils {
     private static final Logger logger = LoggerFactory.getLogger(CompanyIOUtils.class);
@@ -37,5 +34,26 @@ public class CompanyIOUtils {
             if (fos != null)
                 fos.close();
         }
+    }
+
+    public byte[] readFileAsBytes(String fileLocation,String subDirectory, String fileName, String fileExtension) throws Exception {
+
+        StringBuilder fileNameWithExtension = new StringBuilder(fileName).append(fileExtension);
+        StringBuilder fileDirectory = new StringBuilder(fileLocation).append(subDirectory);
+        File directory = new File(fileDirectory.toString());
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        FileInputStream fis = null;
+        byte[] data = null;
+        try {
+            File file = new File(directory, fileNameWithExtension.toString());
+            fis = new FileInputStream(file);
+            data = fis.readAllBytes();
+        } finally {
+            if (fis != null)
+                fis.close();
+        }
+        return data;
     }
 }
